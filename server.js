@@ -1,14 +1,17 @@
-const express = require('express');
-const path = require('path');
-const app = express();
-const PORT = process.env.PORT || 3000;
+import express from 'express'
+import { createServer as createViteServer } from 'vite'
+import { dirname, resolve } from 'path'
+import { fileURLToPath } from 'url'
 
-app.use(express.static(path.join(__dirname, 'dist')));
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
+async function createServer() {
+  const app = express()
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-});
+  // Usar carpeta dist después de construir
+  app.use(express.static(resolve(__dirname, 'dist')))
+
+  app.listen(process.env.PORT || 3000, () => {
+    console.log('Servidor iniciado')
+  })
+}
